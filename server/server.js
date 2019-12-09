@@ -1,28 +1,29 @@
 /*third module import */
-const express=require('express');
-const bodyParser=require('body-parser');
+var express = require('express');
+var bodyParser = require('body-parser');
 
-/*local import*/
-var {mongoose}=require('./db/mongoose.js');
-var {Todo}=require('./models/todo.js');
-var {User}=require('./models/user.js');
+var {mongoose} = require('./db/mongoose');
+var {Todo} = require('./models/todo');
+var {User} = require('./models/user');
 
-var app=express();
+var app = express();
+
 app.use(bodyParser.json());
 
-app.post('/todos',(req,res)=>{
-  var todo=new Todo({
-    text:req.body.text
-  })
-  todo.save().then((doc)=>{
-    console.log(`${todo.text} ..... is saved`);
+app.post('/todos', (req, res) => {
+  var todo = new Todo({
+    text: req.body.text
+  });
+
+  todo.save().then((doc) => {
     res.send(doc);
-  },e=>{
-    res.send(e)
-  })
+  }, (e) => {
+    res.status(400).send(e);
+  });
 });
 
-app.listen(3001,()=>{
-  console.log(`stated on the port ${3001}`)
-})
+app.listen(3001, () => {
+  console.log('Started on port 3001');
+});
 
+module.exports = {app};
