@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
-const url = 'mongodb://localhost:27017/TodoApp';
 mongoose.Promise=global.Promise;
-mongoose.connect(process.env.MONGODB_URI || url,{useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true });
 
 module.exports={
   mongoose,
