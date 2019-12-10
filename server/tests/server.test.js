@@ -100,3 +100,27 @@ describe('GET /todos/:id',()=>{
       .end(done)
   });
 })
+describe('DELETE /todos/:id',()=>{
+  it('should remove a todo',done=>{
+    request(app)
+      .get(`/todos/${todos[0]._id.toHexString()}`)
+      .expect(200)
+      .expect((res)=>{
+        expect(res.body.todo.text).toBe(todos[0].text)
+      })
+      .end(done)
+  });
+  it('should return 404 if ID is not found in the Data Base',done=>{
+    var id=new ObjectID().toHexString()
+    request(app)  
+      .get(`/todos/${id}`)
+      .expect(404)
+      .end(done)
+  });
+  it('shoyld return 404 if ID is not valid',done=>{
+    request(app)
+      .get('/todos/1234abcd')
+      .expect(404)
+      .end(done)
+  })
+});
