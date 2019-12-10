@@ -9,13 +9,14 @@
     "test-watch": "nodemon --exec \"npm test\""
   },
   "engines": {
-    "node":"10.15.3"
+    "node": "10.15.3"
   },
   "author": "example <adelbensalem1992@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "lodash": "^4.15.0",
     "mongodb": "^3.3.5",
     "mongoose": "^4.5.9"
   },
