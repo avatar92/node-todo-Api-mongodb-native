@@ -2,15 +2,16 @@ require('./config/config.js')
 
 
 /*third module import */
-var express = require('express');
-var bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
 const _=require('lodash')
-var {ObjectID}=require('mongodb')
+const {ObjectID}=require('mongodb')
+const bcrypt=require('bcryptjs')
 
 /*Local module */
-var {mongoose} = require('./db/mongoose');
-var {Todo} = require('./models/todo');
-var {User} = require('./models/user');
+const {mongoose} = require('./db/mongoose');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
 const {authenticate}=require('./middleware/authenticate.js')
 
 var app = express();
@@ -110,6 +111,34 @@ app.post('/users',(req,res)=>{
 app.get('/users/me',authenticate,(req,res)=>{
   res.send(req.user)
 })
+
+app.post('/users/login',(req,res)=>{
+  var body=_.pick(req.body,['email','password']);
+
+  User.findByCredentials(body.email,body.password).then((user)=>{
+    return user.generateAuthToken().then((token)=>{
+      res.header('x-auth',token).send(user)
+    });
+  }).catch((e)=>{
+    res.sendStatus(400).send()
+  })
+
+  // User.findOne({email:req.body.email}).then((user)=>{
+  //   if(!user){
+  //     return res.sendStatus(404).send()
+  //   }else{
+  //     bcrypt.compare(req.body.password,user.password,(err,result)=>{
+  //       if(result===false){
+  //         return res.sendStatus(401).send();
+  //       }
+  //     })
+  //     res.sendStatus(200).send(user);
+  //   }
+
+  // }).catch((e)=>res.send(400).send())
+
+});
+
 app.listen(port, () => {
   console.log(`server is running on port ${port}`);
 });
