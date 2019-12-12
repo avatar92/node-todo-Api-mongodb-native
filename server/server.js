@@ -122,21 +122,14 @@ app.post('/users/login',(req,res)=>{
   }).catch((e)=>{
     res.sendStatus(400).send()
   })
+});
 
-  // User.findOne({email:req.body.email}).then((user)=>{
-  //   if(!user){
-  //     return res.sendStatus(404).send()
-  //   }else{
-  //     bcrypt.compare(req.body.password,user.password,(err,result)=>{
-  //       if(result===false){
-  //         return res.sendStatus(401).send();
-  //       }
-  //     })
-  //     res.sendStatus(200).send(user);
-  //   }
-
-  // }).catch((e)=>res.send(400).send())
-
+app.delete('/users/me/token',authenticate,(req,res)=>{
+  req.user.removeToken(req.token).then(()=>{
+    res.sendStatus(200).send();
+  },()=>{
+    res.status(400).send(); 
+  });
 });
 
 app.listen(port, () => {
